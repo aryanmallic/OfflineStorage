@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Offline Storage</string>
+    <string name="label_id_colon">Id:</string>
+    <string name="label_user_id_colon">User Id:</string>
+    <string name="label_title_colon">Title:</string>
+    <string name="label_description_colon">Description:</string>
+    <string name="label_lat_colon">Lat:</string>
+    <string name="label_lng_colon">Lng:</string>
+    <string name="label_created_colon">Created on:</string>
+    <string name="label_updated_colon">Updated on:</string>
+    <string name="label_edit">edit</string>
+    <string name="label_update">Update</string>
+    <string name="label_map">Map</string>
+    <string name="label_title">Title</string>
+    <string name="label_description">Description</string>
+    <string name="label_save">Save</string>
+    <string name="label_delete">Delete</string>
+</resources>
