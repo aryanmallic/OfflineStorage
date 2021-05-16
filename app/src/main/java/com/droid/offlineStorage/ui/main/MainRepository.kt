@@ -88,9 +88,9 @@ class MainRepository(private val exampleDao: ExampleDao) {
                         it.lng = lng
                     }
                     .collect {
-                        Log.e("TAG", "Updating ")
+                        Log.d("TAG", "Updating..")
                     }
-                Log.e("TAG", "Updatedddd ")
+                Log.d("TAG", "Updated ")
                 exampleDao.deleteAll()
                 exampleDao.insertExamples(it)
             }

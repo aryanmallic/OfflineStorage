@@ -56,7 +56,7 @@ class EditActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
 
-        intent.extras?.let { it ->
+        intent.extras?.let {
             val id = it.getInt(Constants.INTENT_ID, 0)
             editViewModel.getById(id)
         }
@@ -92,9 +92,5 @@ class EditActivity : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
-    }
-
-    private fun Context.appToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

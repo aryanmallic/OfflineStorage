@@ -4,5 +4,5 @@
     Alternatively, follow the directions here:
     https://developers.google.com/maps/documentation/android/start#get-key
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">Your key</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAiIwwVTy2AUSnEvuyyiFUMaceFUdiI58Y</string>
 </resources>

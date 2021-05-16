@@ -1,4 +1,5 @@
 package com.droid.offlineStorage.location
+
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Service
@@ -40,7 +41,6 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
 
     // Store LocationManager.GPS_PROVIDER or LocationManager.NETWORK_PROVIDER information
     private var providerInfo: String? = null
-
 
 
     companion object {
@@ -107,21 +107,23 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
             // Application can use GPS or Network Provider
 
 
+            providerInfo?.let {
+                locationManager?.let { locManager ->
+                    if (it.isNotEmpty()) {
+                        locManager.requestLocationUpdates(
+                            it,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(),
+                            this
+                        )
 
-            if (providerInfo!!.isNotEmpty()) {
-                locationManager!!.requestLocationUpdates(
-                    providerInfo!!,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(),
-                    this
-                )
-
-                if (locationManager != null) {
-                    location = locationManager!!.getLastKnownLocation(providerInfo!!)
-                    // location = getLastKnownLocation()
-                    updateGPSCoordinates()
+                        location = locManager.getLastKnownLocation(it)
+                        // location = getLastKnownLocation()
+                        updateGPSCoordinates()
+                    }
                 }
             }
+
         } catch (e: Exception) {
             //e.printStackTrace();
             Log.e(TAG, "Impossible to connect to LocationManager", e)
@@ -133,15 +135,21 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
     private fun getLastKnownLocation(): Location? {
         locationManager =
             applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val providers = locationManager!!.getProviders(true)
+
         var bestLocation: Location? = null
-        for (provider in providers) {
-            val l = locationManager!!.getLastKnownLocation(provider) ?: continue
-            if (bestLocation == null || l.accuracy < bestLocation.accuracy) {
-                // Found best last known location: %s", l);
-                bestLocation = l
+        locationManager?.let {
+            val providers = it.getProviders(true)
+
+            for (provider in providers) {
+                val l = it.getLastKnownLocation(provider) ?: continue
+                if (bestLocation == null /*|| l.accuracy < bestLocation!!.accuracy*/) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l
+                }
             }
         }
+
+
         return bestLocation
     }
 
@@ -149,9 +157,9 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
      * Update GPSTracker latitude and longitude
      */
     private fun updateGPSCoordinates() {
-        if (location != null) {
-            latitude = location!!.latitude
-            longitude = location!!.longitude
+        location?.let {
+            latitude = it.latitude
+            longitude = it.longitude
         }
     }
 
@@ -160,10 +168,9 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
      * @return latitude
      */
     fun getLatitude(): Double {
-        if (location != null) {
-            latitude = location!!.latitude
+        location?.let {
+            latitude = it.latitude
         }
-
         return latitude
     }
 
@@ -172,8 +179,8 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
      * @return
      */
     fun getLongitude(): Double {
-        if (location != null) {
-            longitude = location!!.longitude
+        location?.let {
+            longitude = it.longitude
         }
         return longitude
     }
@@ -192,8 +199,8 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
      * Calling this method will stop using GPS in your app
      */
     fun stopUsingGPS() {
-        if (locationManager != null) {
-            locationManager!!.removeUpdates(this@GPSTracker)
+        locationManager?.let {
+            it.removeUpdates(this@GPSTracker)
         }
     }
 
@@ -228,12 +235,12 @@ class GPSTracker(private val mContext: Activity) : Service(), LocationListener {
      * @return null or List<Address>
     </Address> */
     fun getGeocoderAddress(context: Context): List<Address>? {
-        if (location != null) {
+
+        location?.let {
 
             val geoCoder = Geocoder(context, Locale.ENGLISH)
 
             try {
-
                 return geoCoder.getFromLocation(latitude, longitude, geocoderMaxResults)
             } catch (e: IOException) {
                 //e.printStackTrace();
